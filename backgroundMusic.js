@@ -1,7 +1,7 @@
 class BackgroundMusic {
     constructor() {
         try {
-            this.audio = new Audio('music/Bubble Bath - The Green Orbs.mp3');
+            this.audio = new Audio('Bubble Bath - The Green Orbs.mp3');
             
             // Log the full path to help debug
             console.log('Full audio path:', new URL(this.audio.src, window.location.href).href);
@@ -15,7 +15,7 @@ class BackgroundMusic {
                 console.error('Audio error:', e);
                 // Try alternative path if first attempt fails
                 if (!this.audio.src.includes('?')) {
-                    this.audio.src = 'music/Bubble Bath - The Green Orbs?type=.mp3';
+                    this.audio.src = 'Bubble Bath - The Green Orbs?type=.mp3';
                 }
             };
             
