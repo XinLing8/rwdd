@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill in the Blank - Quizzing You</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        body {
+            background: #ecf2fa;  
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .quiz-container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: float 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.15),
+                0 1px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .timer {
+            background: linear-gradient(to right, #82EC76 0%, #9E76F3 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(130, 236, 118, 0.2);
+            animation: pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .timer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        .progress {
+            color: #9E76F3;  /* Purple text */
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .question {
+            text-align: center;
+            font-size: 24px;
+            color: #6B4E8B;
+            margin: 60px 0;
+            padding: 30px;
+            background: rgba(158, 118, 243, 0.05);
+            border-radius: 20px;
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(158, 118, 243, 0.2);
+        }
+
+        .answer-input {
+            width: 120px;
+            height: 45px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #82EC76;  /* Green border */
+            border-radius: 15px;
+            padding: 5px 10px;
+            color: #6B4E8B;  /* Dark purple text */
+            margin: 0 10px;
+            background: white;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #9E76F3;  /* Purple border on focus */
+            box-shadow: 0 0 10px rgba(158, 118, 243, 0.2);
+            transform: scale(1.05);
+            background: rgba(158, 118, 243, 0.02);
+        }
+
+        .answer-input::placeholder {
+            color: rgba(107, 78, 139, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .answer-input:hover::placeholder {
+            color: rgba(107, 78, 139, 0.5);
+        }
+
+        .char-counter {
+            position: absolute;
+            bottom: -25px;
+            right: 10px;
+            font-size: 12px;
+            color: #9E76F3;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .answer-input:focus + .char-counter {
+            opacity: 1;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .nav-button {
+            background: linear-gradient(to right, #82EC76 0%, #9E76F3 100%); 
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-button:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-button.next {
+            background: linear-gradient(to right, #9E76F3 0%, #82EC76 100%);  
+        }
+
+        .answer-input.correct {
+            background: #a7e3a0d5;
+            color: white;
+            border-color: #a7e3a0d5;
+        }
+
+        .answer-input.incorrect {
+            background: #f47e7e;
+            color: white;
+            border-color: #f47e7e;
+        }
+
+        @media (max-width: 600px) {
+            .quiz-container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .question {
+                font-size: 20px;
+                padding: 20px;
+            }
+
+            .nav-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <div class="timer">
+                <i class="fas fa-clock"></i>
+                Time Left: <span id="time">29:43</span>
+            </div>
+            <div class="progress">
+                Question <span class="current">2</span> of <span class="total">5</span>
+            </div>
+        </div>
+
+        <div class="question">
+            He got cold <input type="text" class="answer-input" placeholder="type" autocomplete="off" onchange="checkAnswer(this)"> (feet/hands) before the big performance.
+        </div>
+
+        <div class="navigation">
+            <button class="nav-button" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button class="nav-button next">
+                Next Question <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function checkAnswer(input) {
+            const correctAnswer = "feet";
+            if (input.value.toLowerCase().trim() === correctAnswer) {
+                input.classList.remove('incorrect');
+                input.classList.add('correct');
+            } else {
+                input.classList.remove('correct');
+                input.classList.add('incorrect');
+            }
+        }
+    </script>
+</body>
+</html>
