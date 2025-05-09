@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fill in the Blank - Quizzing You</title>
+    
+    <!-- Try both Font Awesome links to ensure one works -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Add this line to ensure Comic Neue font is loading -->
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Neue', cursive;
+        }
+
+        body {
+            background: #ecf2fa;  
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Add floating animation for quiz container */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .quiz-container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: float 6s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.15),
+                0 1px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .timer {
+            background: linear-gradient(to right, #82EC76 0%, #9E76F3 100%);  /* Green to purple gradient */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(130, 236, 118, 0.2);
+            animation: pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .timer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        .progress {
+            color: #9E76F3;  /* Purple text */
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .question {
+            text-align: center;
+            font-size: 24px;
+            color: #6B4E8B;
+            margin: 60px 0;
+            padding: 30px;
+            background: rgba(158, 118, 243, 0.05);
+            border-radius: 20px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .matching-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            gap: 40px;
+        }
+
+        .matching-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .matching-box {
+            background: white;
+            border: 2px solid #82EC76;
+            border-radius: 15px;
+            padding: 15px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .matching-box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(158, 118, 243, 0.2);
+        }
+
+        .matching-box.pair1 {
+            background: #b7b6ff;
+            color: white;
+            border-color: #b7b6ff;
+        }
+
+        .matching-box.pair2 {
+            background: #91bcf3;
+            color: white;
+            border-color: #8ed1eb;
+        }
+
+        .matching-box.correct {
+            background: #90EE90;
+            color: white;
+            border-color: #90EE90;
+        }
+
+        .matching-box.incorrect {
+            background: #f47e7e;
+            color: white;
+            border-color: #f47e7e;
+        }
+
+        .matching-box.selected {
+            background: #b7b6ff;
+            color: white;
+            border-color: #b7b6ff;
+        }
+
+        .matching-title {
+            font-size: 24px;
+            color: #6B4E8B;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .matching-hint {
+            font-size: 14px;
+            color: 6B4E8B;
+            margin-bottom: 25px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .question:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(158, 118, 243, 0.2);
+        }
+
+        .answer-input {
+            width: 120px;
+            height: 45px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #82EC76;  
+            border-radius: 15px;
+            padding: 5px 10px;
+            color: #6B4E8B; 
+            margin: 0 10px;
+            background: white;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #9E76F3;  
+            box-shadow: 0 0 10px rgba(158, 118, 243, 0.2);
+            transform: scale(1.05);
+            background: rgba(158, 118, 243, 0.02);
+        }
+
+        .answer-input::placeholder {
+            color: rgba(107, 78, 139, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .answer-input:hover::placeholder {
+            color: rgba(107, 78, 139, 0.5);
+        }
+
+        /* Character counter */
+        .char-counter {
+            position: absolute;
+            bottom: -25px;
+            right: 10px;
+            font-size: 12px;
+            color: #9E76F3;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .answer-input:focus + .char-counter {
+            opacity: 1;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .nav-button {
+            background: linear-gradient(to right, #82EC76 0%, #9E76F3 100%);  /* Green to purple gradient */
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-button:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-button.next {
+            background: linear-gradient(to right, #9E76F3 0%, #82EC76 100%);  /* Purple to green gradient */
+        }
+
+        /* Keyboard shortcuts hint */
+        .keyboard-hint {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #9E76F3;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-button:hover .keyboard-hint {
+            opacity: 1;
+        }
+
+        .check-answer-btn {
+            background: linear-gradient(to right, #82EC76 0%, #9E76F3 100%);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .check-answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 600px) {
+            .quiz-container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            .question {
+                font-size: 20px;
+                padding: 20px;
+            }
+
+            .nav-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <div class="timer">
+                <i class="fas fa-clock"></i>
+                Time Left: <span id="time">29:43</span>
+            </div>
+            <div class="progress">
+                Question <span class="current">3</span> of <span class="total">5</span>
+            </div>
+        </div>
+
+        <div class="question">
+            <div class="matching-title">Match the subject with the correct verb</div>
+            <div class="matching-hint">Instructions: Select a blank from the sentences, then match it with the correct verb form.</div>
+            <div style="text-align: left; margin-bottom: 30px;">
+                <p style="margin-bottom: 15px;">I ___ ( ) to the park.</p>
+                <p>He ___ ( ) to school yesterday.</p>
+            </div>
+            <div class="matching-container">
+                <div class="matching-column">
+                    <div class="matching-box" data-type="subject" data-value="blank1">Blank 1 (I ___)</div>
+                    <div class="matching-box" data-type="subject" data-value="blank2">Blank 2 (He ___)</div>
+                </div>
+                <div class="matching-column">
+                    <div class="matching-box" data-type="verb" data-value="walk">walk</div>
+                    <div class="matching-box" data-type="verb" data-value="walked">walked</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-button" disabled>
+                <i class="fas fa-arrow-left"></i> Previous
+            </button>
+            <button class="nav-button finish" disabled onclick="finishQuiz()">
+                Finish <i class="fas fa-check"></i>
+            </button>
+            </div>
+        </div>
+    
+        <script>
+            function checkCompletion() {
+                const correctAnswers = document.querySelectorAll('.matching-box.correct').length / 2; 
+                localStorage.setItem("correctAnswers", correctAnswers); 
+                document.querySelector('.nav-button.finish').disabled = false; 
+            }
+    
+            let timeElapsed = localStorage.getItem("quizTimer") ? parseInt(localStorage.getItem("quizTimer")) : 0;
+            let correctAnswers = localStorage.getItem("correctAnswers")?parseInt(localStorage.getItem("correctAnswers")):0;
+            let timerInterval;
+    
+            function updateTimer() {
+                let minutes = Math.floor(timeElapsed / 60);
+                let seconds = timeElapsed % 60;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+    
+                document.getElementById("time").textContent = `${minutes}:${seconds}`;
+                timeElapsed++;
+                localStorage.setItem("quizTimer", timeElapsed); // Save time across pages
+            }
+    
+            function startTimer() {
+                if (!timerInterval) {
+                    timerInterval = setInterval(updateTimer, 1000);
+                }
+            }
+    
+            document.addEventListener("DOMContentLoaded", () => {
+                startTimer();
+            });
+    
+            let selectedBox = null;
+        
+            const correctMatches = {
+                'blank1': 'walk',
+                'blank2': 'walked'
+            };
+        
+            document.querySelectorAll('.matching-box').forEach(box => {
+                box.addEventListener('click', () => {
+                    if (box.classList.contains('correct') || box.classList.contains('incorrect')) {
+                        return;
+                    }
+                
+                    if (!selectedBox) {
+                        if (box.dataset.type === 'subject') {
+                            selectedBox = box;
+                            box.classList.add('selected');
+                        }
+                    } else {
+                        if (box.dataset.type === 'verb') {
+                            const subject = selectedBox.dataset.value;
+                            const verb = box.dataset.value;
+                        
+                            const isCorrect = correctMatches[subject] === verb;
+                        
+                            const matchClass = isCorrect ? 'correct' : 'incorrect';
+                            selectedBox.classList.remove('selected');
+                            selectedBox.classList.add(matchClass);
+                            box.classList.add(matchClass);
+    
+                            selectedBox = null;
+                            checkCompletion();
+                        }
+                    }
+                });
+            });
+    
+            function finishQuiz(){
+                localStorage.removeItem("quizTimer");
+                window.location.href = "G2.verb.summary.html";
+            }
+    </script>
+</body>
+</html>
