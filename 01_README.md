@@ -42,9 +42,7 @@ This project is a collaborative effort by the following team members:
 - **Course:** AAPP012-4-2 Responsive Web Design and Development  
 - **Intake Code:** UCDF2308ICT/SE  
 - **Semester:** Diploma Semester 4  
-- **Lecturer:** Daniel Mago Vistro
-- **Date Assigned:** Week 2  
-- **Date Due:** Week 12  
+- **Lecturer:** Mr. Daniel Mago Vistro
 
 ## Assignment Objective
 
