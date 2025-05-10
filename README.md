@@ -91,7 +91,7 @@ We have prepared detailed documentation outlining the development of this projec
 - Screenshots, evaluations, and future enhancements  
 - APA-style references
 
-> 📥 **[Click here to access the full project documentation]([./documentation/QuizzingYou_Documentation.pdf](https://github.com/XinLing8/rwdd/blob/main/Documentation/RWDD%20Group10.pdf))**
+> 📥 **[Click here to access the full project documentation]([[./documentation/QuizzingYou_Documentation.pdf](https://github.com/XinLing8/rwdd/blob/main/Documentation/RWDD%20Group10.pdf)](https://github.com/XinLing8/rwdd/blob/main/Documentation/RWDD%20Group10.pdf))**
 
 ## Disclaimer
 
