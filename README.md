@@ -31,18 +31,18 @@ The design adheres to **Human-Computer Interaction (HCI)** principles and is res
 
 This project is a collaborative effort by the following team members:
 
-- **Yap Xin Ling** (Team Member & Contributor)
-- **Siew Zhen Lynn**
-- **Sim Tian**
-- **Yong Xuan Lyn**
-- **Yeo Pei Wen**
+- **Yap Xin Ling** (Group Member & Contributor)
+- **Siew Zhen Lynn** (Group Leader & Contributor)
+- **Sim Tian** (Group Member & Contributor)
+- **Yong Xuan Lyn** (Group Member & Contributor)
+- **Yeo Pei Wen** (Group Member & Contributor)
 
 ## Lecturer & Intake Details
 
 - **Course:** AAPP012-4-2 Responsive Web Design and Development  
 - **Intake Code:** UCDF2308ICT/SE  
 - **Semester:** Diploma Semester 4  
-- **Lecturer:** *[Lecturer Name]*  
+- **Lecturer:** Daniel Mago Vistro
 - **Date Assigned:** Week 2  
 - **Date Due:** Week 12  
 
@@ -68,6 +68,30 @@ The objective of this assignment is to:
 - HTML5 / CSS3 / JavaScript
 - PHP / MySQL
 - Figma (for wireframing and prototyping)
+
+## ⚠️ PHP Limitation
+
+Please note that this project includes **PHP files**, which require a server-side environment to run.  
+Since **GitHub Pages only supports static content** (HTML, CSS, JavaScript), **PHP functionality will not work on the hosted GitHub site**.
+
+To test the full functionality of this system (e.g., login, quiz submission, database operations), please download the source code and run it using:
+
+- A local server environment (e.g., **XAMPP**, **MAMP**, or **WAMP**)  
+- Or deploy it to a PHP-enabled web server
+
+## 📄 Documentation
+
+We have prepared detailed documentation outlining the development of this project, which includes:
+
+- Project objectives and scope  
+- System flowcharts and wireframes  
+- Entity-Relationship Diagrams (ERD)  
+- Design rationale  
+- Implementation steps  
+- Screenshots, evaluations, and future enhancements  
+- APA-style references
+
+> 📥 **[Click here to access the full project documentation]([./documentation/QuizzingYou_Documentation.pdf](https://github.com/XinLing8/rwdd/blob/main/Documentation/RWDD%20Group10.pdf))**
 
 ## Disclaimer
 
